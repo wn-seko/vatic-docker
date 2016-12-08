@@ -40,3 +40,6 @@ After you annotate your videos, you can just hit the button "Output Labels" to s
 
 When you are done annotating the video just type in <ctl>c or exit to close the docker container.
 
+## Generating Matlab labels
+
+The software is setup to generate labelme annotation.  To generate matlab annotation, copy the myphp.php.matlab to the public/directory/myphp.php file. Then exit the docker terminal and re-run the docker command.  Now when you generate the output it will be in matlab format.

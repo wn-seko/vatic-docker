@@ -56,6 +56,7 @@ RUN sudo chown -R 755 /root/vatic/public && \
     find /root -type d -exec chmod 775 {} \; && \
     sudo chmod -R 775 /var/www && \
     apt-get install -y links && \
+    apt-get install -y python-scipy && \
     sudo apache2ctl restart
 
 # Debug tools
