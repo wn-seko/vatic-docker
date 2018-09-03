@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # Settings
-ID=currentvideo
 VIDEOPATH=/root/vatic/data/videos_in
+VIDEO_OUT_PATH=/root/vatic/data/videos_out
 ANNOTATEDFRAMEPATH=/root/vatic/data/frames_in
-TURKOPS="--offline --title HelloTurk!"
 LABEL_FILE=/root/vatic/data/labels.txt
 if [ -f "$LABEL_FILE" ]
 then
@@ -29,7 +28,7 @@ then
         else
             echo "No new videos to process."
         fi
-   fi 
+   fi
 fi
 if [ -d ${ANNOTATEDFRAMEPATH} ]
 then
@@ -50,9 +49,6 @@ fi
 mkdir -p $ANNOTATEDFRAMEPATH
 cd /root/vatic
 
-# load frames and publish. This will print out access URLs.
-turkic load $ID $ANNOTATEDFRAMEPATH $LABELS $TURKOPS
-
 mkdir -p /root/vatic/public/directory
 
 if [ -f /root/vatic/data/db.mysql ];
@@ -61,21 +57,27 @@ then
     mysql -u root < /root/vatic/data/db.mysql
 fi
 
-# replace the 'localhost' of the output to the host's address, and format it into
-# a series of html links. Save this at the /directory page in the website.
-{ turkic publish --offline |\
-  tee /dev/fd/3 | sed "s|http://localhost|<a href=\.\.|" |\
-                  sed "s|offline|offline> Video Segment <\/a><br>|"  > /root/vatic/public/directory/index.html; } 3>&1
+OUTPUT_HTML=/root/vatic/public/directory/index.html
 
+if [ -f ${OUTPUT_HTML} ];
+then
+    rm ${OUTPUT_HTML}
+fi
+
+touch ${OUTPUT_HTML}
+chmod 755 ${OUTPUT_HTML}
+
+for i in $(ls $VIDEO_OUT_PATH); do
+    video=`echo $i | tr -d " "`
+    echo "<a href=\"#\" onclick=\"callNextVideophp('$video');return false;\">$i</a>" >> ${OUTPUT_HTML}
+done
 
 # add some user interface controls
-#cat $PWD/ascripts/vatic_index.html >> /root/vatic/public/index.html
-cat $PWD/ascripts/myhtml.html >> /root/vatic/public/directory/index.html
+cat $PWD/ascripts/myhtml.html >> ${OUTPUT_HTML}
+
 cp $PWD/ascripts/myphp.php  /root/vatic/public/directory
 chgrp -R www-data /root/vatic/data
 chmod 775 /root/vatic/data
 
-
 # open up a bash shell on the server
-
 /bin/bash
