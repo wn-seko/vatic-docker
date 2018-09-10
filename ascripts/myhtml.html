@@ -4,42 +4,16 @@
 <meta http-equiv=”Pragma” content=”no-cache”>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script type="text/javascript">
-function callLabelphp(label) {
+function callLabelphp(video) {
     $.ajax({
         url: 'myphp.php',
         type: 'post',
-        data: {action: 'doLabels', labelout: label },
+        data: {action: 'doLabels', video: video },
         success: function(output) {
             alert(output);
         }
     });
 };
-function callNextVideophp(video) {
-    $.ajax({
-        url: 'myphp.php',
-        type: 'post',
-        data: {action: 'nextVideo', video: video },
-        success: function(output) {
-            var path = output.trim()
-            if (/offline$/.test(path)) {
-                location.href = path + '&v=' + video
-            } else {
-                alert(output);
-            }
-        }
-    })
-}
 </script>
 
 </head>
-<body>
-<form>
-<br>
-Click on above links to create/edit annotations of the video.
-<br>
-Click on the below button once your annotations are done to output to a file called "output.xml".
-<br>
-<br>
-<input type="button" name="doLabels" value="Output Labels" onclick="callLabelphp()"/>
-</form>
-</body>

@@ -5,6 +5,7 @@ VIDEOPATH=/root/vatic/data/videos_in
 VIDEO_OUT_PATH=/root/vatic/data/videos_out
 ANNOTATEDFRAMEPATH=/root/vatic/data/frames_in
 LABEL_FILE=/root/vatic/data/labels.txt
+OUTPUT_DIR=/root/vatic/data/output
 if [ -f "$LABEL_FILE" ]
 then
     LABELS=`cat $LABEL_FILE`
@@ -30,6 +31,12 @@ then
         fi
    fi
 fi
+
+if [ ! -e ${OUTPUT_DIR} ]
+then
+    mkdir -p ${OUTPUT_DIR}
+fi
+
 if [ -d ${ANNOTATEDFRAMEPATH} ]
 then
     OLDVIDEO=1
@@ -39,6 +46,7 @@ then
     echo "!!!No new video or access to previous video's frames!!!"
     exit 1
 fi
+
 # Start database and server
 /root/vatic/startup.sh
 
@@ -67,13 +75,33 @@ fi
 touch ${OUTPUT_HTML}
 chmod 755 ${OUTPUT_HTML}
 
-for i in $(ls $VIDEO_OUT_PATH); do
-    video=`echo $i | tr -d " "`
-    echo "<a href=\"#\" onclick=\"callNextVideophp('$video');return false;\">$i</a>" >> ${OUTPUT_HTML}
-done
-
 # add some user interface controls
 cat $PWD/ascripts/myhtml.html >> ${OUTPUT_HTML}
+
+i=0
+
+for p in $(ls $VIDEO_OUT_PATH); do
+    video=`echo $p | tr -d " "`
+    turkic load $video "${ANNOTATEDFRAMEPATH}/${video}" $LABELS $TURKOPS --offline
+    videos[i]=${video}
+    ((i++))
+done
+
+i=0
+
+echo "<body>" >> ${OUTPUT_HTML}
+
+for u in $(turkic publish --offline); do
+    HREF=$(echo $u|sed "s|http://localhost|\.\.|")
+    echo "<a href=\"${HREF}\">${videos[i]}</a>" >> ${OUTPUT_HTML}
+    echo "<a href=\"#\" onclick='callLabelphp(\"${videos[i]}\")'>output</a>" >> ${OUTPUT_HTML}
+    echo "<br />" >> ${OUTPUT_HTML}
+    ((i++))
+done
+
+echo "</body>" >> ${OUTPUT_HTML}
+echo "</html>" >> ${OUTPUT_HTML}
+
 
 cp $PWD/ascripts/myphp.php  /root/vatic/public/directory
 chgrp -R www-data /root/vatic/data
