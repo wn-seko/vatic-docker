@@ -1,4 +1,6 @@
 #!/bin/bash
+export LANG=C.UTF-8
+export LANGUAGE=en_US
 
 # Settings
 VIDEOPATH=/root/vatic/data/videos_in
