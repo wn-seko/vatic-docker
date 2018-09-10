@@ -10,6 +10,6 @@ mkdir -p $DONEVIDEOPATH
 cd /root/vatic
 for i in $( ls $TODOVIDEOPATH); do
     mkdir $FRAMEPATH/$i
-    turkic extract $TODOVIDEOPATH/$i $FRAMEPATH/$i --width 720 --height 480
+    turkic extract $TODOVIDEOPATH/$i $FRAMEPATH/$i --no-resize
     mv $TODOVIDEOPATH/$i $DONEVIDEOPATH/
 done
