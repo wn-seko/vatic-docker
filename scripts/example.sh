@@ -113,5 +113,7 @@ cp $PWD/ascripts/myphp.php  /root/vatic/public/directory
 chgrp -R www-data /root/vatic/data
 chmod 775 /root/vatic/data
 
+cp -r /root/vatic/data/frames_in/* /root/vatic/public/frames/
+
 # open up a bash shell on the server
 /bin/bash
