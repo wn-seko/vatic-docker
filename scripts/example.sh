@@ -92,15 +92,19 @@ done
 i=0
 
 echo "<body>" >> ${OUTPUT_HTML}
+echo "<table>" >> ${OUTPUT_HTML}
 
 for u in $(turkic publish --offline); do
     HREF=$(echo $u|sed "s|http://localhost|\.\.|")
-    echo "<a href=\"${HREF}\">${videos[i]}</a>" >> ${OUTPUT_HTML}
-    echo "<a href=\"#\" onclick='callLabelphp(\"${videos[i]}\")'>output</a>" >> ${OUTPUT_HTML}
-    echo "<br />" >> ${OUTPUT_HTML}
+    echo "<tr>" >> ${OUTPUT_HTML}
+    echo "<td><a href=\"${HREF}\">${videos[i]}</a></td>" >> ${OUTPUT_HTML}
+    echo "<td><a href=\"#\" onclick='callLabelphp(\"${videos[i]}\")'>output</a></td>" >> ${OUTPUT_HTML}
+    echo "<td><a href=\"#\" onclick='callVisualize(\"${videos[i]}\")'>visualize</a></td>" >> ${OUTPUT_HTML}
+    echo "<tr />" >> ${OUTPUT_HTML}
     ((i++))
 done
 
+echo "</table>" >> ${OUTPUT_HTML}
 echo "</body>" >> ${OUTPUT_HTML}
 echo "</html>" >> ${OUTPUT_HTML}
 

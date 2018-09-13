@@ -15,6 +15,16 @@ function callLabelphp(video) {
         }
     });
 };
+function callVisualize(video) {
+    $.ajax({
+        url: 'myphp.php',
+        type: 'post',
+        data: {action: 'doVisualize', video: video },
+        success: function(output) {
+            alert(output);
+        }
+    });
+};
 </script>
 
 </head>
