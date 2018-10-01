@@ -58,7 +58,6 @@ COPY scripts /root/vatic
 # moved to the end to make troubleshooting quicker
 
 RUN chmod 755 /root/vatic/extract.sh
-RUN chmod 755 /root/vatic/next_video.sh
 
 # Prepare workspace for use
 EXPOSE 80 443
