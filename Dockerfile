@@ -59,7 +59,7 @@ COPY scripts /root/vatic
 
 RUN chmod 755 /root/vatic/extract.sh
 
-ENV TURKOPS "--blow-radius 0"
+ENV TURKOPS "--blow-radius 0 --length 10000"
 
 # Prepare workspace for use
 EXPOSE 80 443
