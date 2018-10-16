@@ -4,6 +4,7 @@ export LANGUAGE=en_US
 
 # Settings
 VIDEOPATH=/root/vatic/data/videos_in
+IMAGEPATH=/root/vatic/data/images_in
 VIDEO_OUT_PATH=/root/vatic/data/videos_out
 ANNOTATEDFRAMEPATH=/root/vatic/data/frames_in
 LABEL_FILE=/root/vatic/data/labels.txt
@@ -32,6 +33,16 @@ then
             echo "No new videos to process."
         fi
    fi
+    if [ -d ${IMAGEPATH} ]
+    then
+        if test "$(ls -A ${IMAGEPATH} 2>/dev/null)"
+        then
+            echo "New Images to process."
+            NEWVIDEO=1
+        else
+            echo "No new images to process."
+        fi
+   fi
 fi
 
 if [ ! -e ${OUTPUT_DIR} ]
@@ -43,7 +54,7 @@ if [ -d ${ANNOTATEDFRAMEPATH} ]
 then
     OLDVIDEO=1
 fi
-if [ ${NEWVIDEO} -eq 0 -a  ${OLDVIDEO} -eq 0 ]
+if [ ${NEWVIDEO} -eq 0 -a ${OLDVIDEO} -eq 0 ]
 then
     echo "!!!No new video or access to previous video's frames!!!"
     exit 1
@@ -82,7 +93,7 @@ cat $PWD/ascripts/myhtml.html >> ${OUTPUT_HTML}
 
 i=0
 
-for p in $(ls $VIDEO_OUT_PATH); do
+for p in $(ls $ANNOTATEDFRAMEPATH); do
     video=`echo $p | tr -d " "`
     turkic load $video "${ANNOTATEDFRAMEPATH}/${video}" $LABELS $TURKOPS --offline
     videos[i]=${video}
