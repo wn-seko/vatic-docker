@@ -22,7 +22,7 @@ RUN sudo pip install SQLAlchemy==1.0.0 && \
 RUN cd /root && \
     git clone https://github.com/cvondrick/turkic.git && \
     git clone https://github.com/cvondrick/pyvision.git && \
-    git clone https://github.com/cvondrick/vatic.git && \
+    git clone https://github.com/wn-seko/vatic.git && \
     cd /root/turkic && \
     sudo python setup.py install && \
     cd /root/pyvision && \
